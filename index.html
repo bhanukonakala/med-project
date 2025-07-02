@@ -1,0 +1,421 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>My Med Store</title>
+  <div class="discount-strip">
+  <span>💊 Save up to 50% on select medicines! | 👨‍👩‍👧 Special prices for children, parents & senior citizens | 🛒 Free home delivery over ₹499!</span>
+</div>
+
+  <style>
+
+
+.auth-box {
+  max-width: 350px;
+  margin: 50px auto;
+  padding: 30px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  text-align: center;
+}
+.auth-box input, .auth-box button {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+.auth-box button {
+  background: #2a9d8f;
+  color: white;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+}
+.auth-box .link {
+  margin-top: 10px;
+}
+.auth-box .link a {
+  color: #2a9d8f;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+
+
+
+
+
+
+
+
+    body { margin: 0; font-family: Arial, sans-serif; background: #f2f2f2; }
+    header {
+      background-color: #2a9d8f; color: white;
+      padding: 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;
+    }
+    .logo { font-size: 24px; font-weight: bold; }
+    nav {
+      display: flex; align-items: center; gap: 10px; margin-top: 10px;
+    }
+    nav button {
+      padding: 8px 12px; border-radius: 5px; border: none;
+      background: white; color: #2a9d8f; font-weight: bold; cursor: pointer;
+    }
+    .search-bar {
+      margin: 20px auto 10px; text-align: center;
+    }
+    .search-bar input {
+      width: 300px; max-width: 90%;
+      padding: 10px; border-radius: 5px; border: 1px solid #ccc;
+      font-size: 16px;
+    }
+
+.discount-strip {
+      background: #ffecec;
+      color: #d00000;
+      font-weight: bold;
+      padding: 10px;
+      overflow: hidden;
+      white-space: nowrap;
+      border-top: 1px solid #ffb3b3;
+      border-bottom: 1px solid #ffb3b3;
+    }
+    .discount-strip span {
+      display: inline-block;
+      padding-left: 100%;
+      animation: scrollText 15s linear infinite;
+    }
+    @keyframes scrollText {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-100%); }
+    }
+
+
+
+    .medicine-list {
+      display: flex; flex-wrap: wrap;
+      padding: 20px; gap: 20px; justify-content: center;
+    }
+    .medicine-card {
+      background: white; padding: 15px;
+      width: 240px; box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      border-radius: 10px; transition: 0.3s;
+    }
+    .medicine-card:hover { transform: scale(1.03); }
+    .medicine-card img {
+      width: 100%; height: 160px; object-fit: cover; border-radius: 8px;
+    }
+    .medicine-name { font-size: 18px; margin: 10px 0 5px; color: #333; }
+    .medicine-desc { font-size: 14px; color: #555; margin-bottom: 8px; height: 40px; overflow: hidden; }
+    .price { font-weight: bold; margin-bottom: 10px; }
+    .add-cart-btn {
+      background: #e76f51; color: white; border: none; padding: 10px; width: 100%; border-radius: 5px; cursor: pointer;
+    }
+    .section {
+      padding: 30px; background: white; margin: 20px; border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    footer {
+      background: #2a9d8f; color: white; padding: 15px; text-align: center; margin-top: 30px;
+    }
+    form input, form textarea, form select {
+      width: 100%; padding: 10px; margin: 10px 0; border-radius: 5px; border: 1px solid #ccc;
+    }
+    form button {
+      background: #2a9d8f; color: white; padding: 10px; border: none; border-radius: 5px; font-weight: bold; cursor: pointer;
+    }
+    #cart-list { list-style: none; padding-left: 0; }
+    #cart-list li {
+      margin-bottom: 5px;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .remove-btn {
+      background: red; color: white; border: none; padding: 3px 8px;
+      border-radius: 4px; cursor: pointer; font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+
+<div id="auth-container">
+  <div id="login-box" class="auth-box">
+    <h2>Login</h2>
+    <form onsubmit="loginUser(event)">
+      <input type="email" id="login-email" placeholder="Email" required />
+      <input type="password" id="login-password" placeholder="Password" required />
+      <button type="submit">Login</button>
+      <p class="link">Don't have an account? <a href="#" onclick="toggleForm('register')">Register</a></p>
+    </form>
+  </div>
+
+  <div id="register-box" class="auth-box" style="display:none;">
+    <h2>Register</h2>
+    <form onsubmit="registerUser(event)">
+      <input type="text" id="reg-name" placeholder="Full Name" required />
+      <input type="email" id="reg-email" placeholder="Email" required />
+      <input type="password" id="reg-password" placeholder="Password" required />
+      <button type="submit">Register</button>
+      <p class="link">Already have an account? <a href="#" onclick="toggleForm('login')">Login</a></p>
+    </form>
+  </div>
+</div>
+
+<!-- Wrap your main store inside this -->
+<div id="main-content" style="display:none;">
+  <!-- Your full store code here -->
+
+
+
+
+
+
+
+
+
+
+
+  <header>
+    <div class="logo">My Med Store</div>
+    <nav>
+      <button onclick="scrollToSection('order')">Order</button>
+      <button onclick="scrollToSection('contact')">Contact</button>
+    </nav>
+  </header>
+
+  <div class="search-bar">
+    <input type="text" id="searchInput" oninput="filterMedicines()" placeholder="Search medicines by name..." />
+  </div>
+
+  <section class="medicine-list" id="medicines"></section>
+
+  <section class="section">
+    <h2>🛒 Cart</h2>
+    <ul id="cart-list"></ul>
+    <div><strong>Total: ₹<span id="total-price">0</span></strong></div>
+  </section>
+
+  <section class="section" id="order">
+    <h2>Place Your Order</h2>
+    <form onsubmit="submitOrder(event)">
+      <input type="text" placeholder="Full Name" required>
+      <input type="text" placeholder="Delivery Address" required>
+      <select required>
+        <option value="">Select Payment Method</option>
+        <option value="cash">Cash on Delivery</option>
+        <option value="card">Credit/Debit Card</option>
+      </select>
+      <button type="submit">Proceed to Pay</button>
+    </form>
+  </section>
+
+  <section class="section" id="contact">
+    <h2>Contact Support</h2>
+    <form action="https://formsubmit.co/YOUR_EMAIL@gmail.com" method="POST">
+  <input type="hidden" name="_captcha" value="false">
+  <input type="hidden" name="_next" value="thankyou.html">
+
+  <input type="email" name="email" placeholder="Your Email" required>
+  <textarea name="message" rows="4" placeholder="Your Message" required></textarea>
+  <button type="submit">Send Message</button>
+</form>
+  <footer>&copy; 2025 My Med Store. All rights reserved. Powered by KBX medicines </footer>
+  </section>
+
+
+  <script>
+    const medicineList = document.getElementById('medicines');
+    const cartList = document.getElementById('cart-list');
+    const totalPriceEl = document.getElementById('total-price');
+    const searchInput = document.getElementById('searchInput');
+    const cart = [];
+
+    const medicines = [
+      { name: "Dolo 650", desc: "Pain reliever and fever reducer.", price: 30, img: "https://5.imimg.com/data5/SELLER/Default/2023/12/369247058/BS/ZD/LQ/101727781/dolo-650-paracetamol-tablets.jpeg" },
+      { name: "Crocin Advance", desc: "Paracetamol for fever and mild pain.", price: 28, img: "https://images.apollo247.in/pub/media/catalog/product/C/R/CRO0091_1.jpg " },
+      { name: "Cetrizine", desc: "Relieves allergy, sneezing, and cold.", price: 20, img: "https://4.imimg.com/data4/MU/BW/MY-4092588/cetirizine-tablets-500x500.jpg " },
+      { name: "Azithral 500", desc: "Antibiotic used for bacterial infections.", price: 110, img: "https://zeelabpharmacy.com/uploads/other_brand_image/Zee672def34c66f4-800X.jpeg" },
+      { name: "Pantop 40", desc: "Reduces stomach acid and treats GERD.", price: 75, img: "https://m.media-amazon.com/images/I/91QUKGVB5hL.jpg" },
+      { name: "Liv 52 DS", desc: "Liver support and detox supplement.", price: 140, img: "https://m.media-amazon.com/images/I/71CBlFFaTgL.jpg" },
+      { name: "Zincovit", desc: "Multivitamin with zinc and antioxidants.", price: 55, img: "https://m.media-amazon.com/images/I/71q3vHWxm8L._UF894,1000_QL80_.jpg" },
+      { name: "Metrogyl 400", desc: "Treats infections caused by bacteria/parasites.", price: 35, img: "https://zeelabpharmacy.com/uploads/other_brand_image/Zee6732f88d5bab2.webp" },
+      { name: "Naproxen Sodium  ", desc: "Pain relief and anti-inflammatory.", price: 80, img: "https://pharmacyhealth.com.au/wp-content/uploads/2021/07/Anti-Inflammatory-Pain-Relief-24-Tabs.jpg" },
+      { name: "Omeprazole 20mg", desc: "Reduces stomach acid, treats GERD.", price: 45, img: "https://5.imimg.com/data5/SELLER/Default/2023/9/341464812/XI/CY/QZ/59547857/omeprazole-20mg-capsules.jpeg" },
+      { name: "Paracetamol 500mg", desc: "Pain reliever and fever reducer.", price: 25, img: "https://5.imimg.com/data5/SELLER/Default/2021/12/LK/ON/KX/43755673/paracetamol-500mg-tablet.jpg" },
+      { name: "Amoxicillin 500mg", desc: "Antibiotic for bacterial infections.", price: 90, img: "https://5.imimg.com/data5/SELLER/Default/2024/5/423237267/FD/RQ/IM/51645087/amoxicillin-500mg-capsule-500x500.png" },
+      { name: "Cetirizine 10mg", desc: "Allergy relief medication.", price: 15, img: "https://5.imimg.com/data5/SELLER/Default/2022/4/RS/UH/FG/2593018/10mg-cetirizine-tablets-ip.jpg" },
+      { name: "Levocetirizine 5mg", desc: "Antihistamine for allergy symptoms.", price: 18, img: "https://5.imimg.com/data5/SELLER/Default/2023/6/316468241/CW/SJ/YE/9469980/levocetirizine-tablet-ip.png" },
+      { name: "Nimesulide 100mg", desc: "Non-steroidal anti-inflammatory drug (NSAID).", price: 50, img: "https://5.imimg.com/data5/SELLER/Default/2023/7/330042758/EB/QF/XO/26342377/nimesulide-100-mg-tablets.jpg" },
+      { name: "Diclofenac Sodium 50mg", desc: "Pain relief and anti-inflammatory.", price: 70, img: "https://5.imimg.com/data5/SELLER/Default/2024/1/373823204/FS/LL/WN/43236650/diclofenac-sodium-tablet-ip-50-mg-reactin.jpg" },
+      { name: "Ranitidine 150mg", desc: "Reduces stomach acid, treats ulcers.", price: 40, img: "https://5.imimg.com/data5/SELLER/Default/2024/11/467598794/NK/UP/XC/129230798/raniheal-ranitidine-hcl-150mg-500x500.jpeg" },
+      { name: "Metformin 500mg", desc: "Used to control blood sugar in diabetes.", price: 65, img: "https://5.imimg.com/data5/SELLER/Default/2022/10/RO/RH/MC/101315720/metformin-500mg-tablet.jpg" },
+      { name: "Atorvastatin 10mg", desc: "Lowers cholesterol levels.", price: 85, img: "https://cdn01.pharmeasy.in/dam/products/J21424/atorvastatin-10-mg-tablet-10-medlife-pure-generics-combo-3-1626532296.jpg" },
+      { name: "Losartan 50mg", desc: "Treats high blood pressure.", price: 55, img: "https://nestoronline.in/product_image/images/CHANGE/Screenshot%202022-08-01%20124605.png" },
+      { name: "Amlodipine 5mg", desc: "Used for high blood pressure and angina.", price: 60, img: "https://5.imimg.com/data5/SELLER/Default/2024/9/448946988/TL/LQ/EK/163113727/amlodipine-5mg-tablet.jpg" },
+      { name: "Levothyroxine 50mcg", desc: "Thyroid hormone replacement.", price: 75, img: "https://5.imimg.com/data5/SELLER/Default/2023/3/AB/UU/EL/151880555/lethyrox-50.jpg" },
+      { name: "Simvastatin 20mg", desc: "Lowers cholesterol and triglycerides.", price: 80, img: "https://5.imimg.com/data5/SELLER/Default/2023/10/357085613/HL/RR/GE/50963842/simvastatin-tablet-ups-20-mg.jpg" },
+      { name: "Clopidogrel 75mg", desc: "Antiplatelet medication to prevent blood clots.", price: 90, img: "https://5.imimg.com/data5/SELLER/Default/2024/7/438346226/RP/SM/ME/53280251/clopidogrel-75-mg-tablets.jpg" },
+      { name: "Omeprazole 40mg", desc: "Stronger dose for severe acid reflux.", price: 100, img: "https://5.imimg.com/data5/SELLER/Default/2023/8/333617770/HU/CV/CM/65567988/omeprazole-40mg-tablet.jpg" },
+      { name: "Montelukast 10mg", desc: "Used for asthma and allergies.", price: 70, img: "https://5.imimg.com/data5/SELLER/Default/2023/1/CC/XW/EZ/23618296/montelukast-10-mg-tablet.jpg" },
+      { name: "Furosemide 40mg", desc: "Diuretic used to treat fluid retention.", price: 50, img: "https://5.imimg.com/data5/SELLER/Default/2023/11/361241926/ND/QY/BU/199239113/furosemide-40-mg-tablet.jpeg" },
+      { name: "Hydrochlorothiazide 25mg", desc: "Diuretic for high blood pressure.", price: 45, img: "https://5.imimg.com/data5/SELLER/Default/2024/2/394795139/SE/KW/NU/111798523/hydrochlorothiazide-25mg-tablet.jpg" },
+      { name: "Gabapentin 300mg", desc: "Used for nerve pain and seizures.", price: 65, img: "https://5.imimg.com/data5/SELLER/Default/2023/9/343061572/HH/XI/YH/557330/gabapentin.jpg" },
+      { name: "Tramadol 50mg", desc: "Pain relief medication.", price: 55, img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTKHa1HmfmVAgKP9XWzxdrzFzVok-xNMJ2grg&s" },
+      { name: "Ciprofloxacin 500mg", desc: "Antibiotic for bacterial infections.", price: 70, img: "https://5.imimg.com/data5/SELLER/Default/2021/3/IL/GQ/RN/31683360/vitcipcin-500-1000x1000.jpeg" },
+      { name: "Amoxicillin-Clavulanate 625mg", desc: "Broad-spectrum antibiotic.", price: 85, img: "https://5.imimg.com/data5/SELLER/Default/2021/6/LF/JG/NH/108983339/whatsapp-image-2021-06-08-at-12-42-28-3-.jpeg" },
+      { name: "Azithromycin 250mg", desc: "Antibiotic for respiratory infections.", price: 90, img: "https://5.imimg.com/data5/SELLER/Default/2024/12/474985976/VA/FE/QS/125278182/azithromycin-250-mg-tablets-i-p.jpeg" },
+      { name: "Metronidazole 400mg", desc: "Antibiotic for bacterial and parasitic infections.", price: 60, img: "https://5.imimg.com/data5/SELLER/Default/2020/9/BN/PD/WY/105453881/metronidazole-tablets-flagyl-400-mg.jpg" },
+      { name: "Ibuprofen 400mg", desc: "Non-steroidal anti-inflammatory drug (NSAID).", price: 50, img: "https://5.imimg.com/data5/SELLER/Default/2023/6/319597573/MH/NE/SR/135658020/ibuprofen-400-mg-bp-tablets.jpg" },
+      { name: "Easofen ", desc: "Non-steroidal anti-inflammatory drug (NSAID).", price: 60, img: "https://www.mccabespharmacy.com/cdn/shop/files/Easofen-400mg-24.jpg?v=1739188983" },
+      { name: "Levocetirizine 5mg", desc: "Antihistamine for allergy symptoms.", price: 18, img: "https://5.imimg.com/data5/SELLER/Default/2023/6/316468241/CW/SJ/YE/9469980/levocetirizine-tablet-ip.png" },
+      { name: "Nimesulide 100mg", desc: "Non-steroidal anti-inflammatory drug (NSAID).", price: 50, img: "https://5.imimg.com/data5/SELLER/Default/2023/6/312653869/LZ/UR/SX/180352824/whatsapp-image-2023-05-22-at-13-54-47-2-.jpeg" },
+      { name: "Diclofenac Sodium 50mg", desc: "Pain relief and anti-inflammatory.", price: 70, img: "https://5.imimg.com/data5/SELLER/Default/2023/2/PZ/SS/TG/88890650/diclofenac-sodium-tablet.jpeg" },
+      { name: "Ranitidine 150mg", desc: "Reduces stomach acid, treats ulcers.", price: 40, img: "https://5.imimg.com/data5/SELLER/Default/2022/11/LO/HW/JB/23618296/ranitidine-150mg-tab-1000x1000.jpg" },
+      { name: "Metformin 500mg", desc: "Used to control blood sugar in diabetes.", price: 65, img: "https://upload.wikimedia.org/wikipedia/commons/d/db/Metformin_500mg_Tablets.jpg" },
+      { name: "Atorvastatin 10mg", desc: "Lowers cholesterol levels.", price: 85, img: "https://images.jdmagicbox.com/quickquotes/images_main/atorvastatin-tablets-ip-10mg-2213188550-k7q0mh60.jpg" },
+      { name: "Losartan 50mg", desc: "Treats high blood pressure.", price: 55, img: "https://5.imimg.com/data5/SELLER/Default/2024/6/427618787/YS/UO/YO/205460954/losartan-50-mg-tablet-500x500.png" },
+      { name: "Amlodipine 5mg", desc: "Used for high blood pressure and angina.", price: 60, img: "https://5.imimg.com/data5/HQ/IC/PK/GLADMIN-6630452/amlodipine-5mg-500x500.jpg" },
+      { name: "Levothyroxine 50mcg", desc: "Thyroid hormone replacement.", price: 75, img: "https://medplusnig.com/storage/app/public/product/2024-11-05-672a10c7aa05f.webp" },
+      { name: "Simvastatin 20mg", desc: "Lowers cholesterol and triglycerides.", price: 80, img: "https://tajdearobpharma.com/wp-content/uploads/2015/03/Simvastatin-Simvastatin-20mg-USP-Tablets1-scaled.jpg" },
+      { name: "Clopidogrel 75mg", desc: "Antiplatelet medication to prevent blood clots.", price: 90, img: "https://5.imimg.com/data5/SELLER/Default/2021/9/OQ/NB/EO/22119152/clopidogrel-75-mg-tablets-500x500.jpeg" },
+      { name: "Omeprazole 40mg", desc: "Stronger dose for severe acid reflux.", price: 100, img: "https://5.imimg.com/data5/SELLER/Default/2024/8/446804505/NR/IH/JE/25738186/omeprazole-capsule-40mg.jpg" },
+      { name: "Montelukast 10mg", desc: "Used for asthma and allergies.", price: 70, img: "https://5.imimg.com/data5/SELLER/Default/2021/6/MF/WE/CW/3184985/montecris10-500x500.jpg" },
+      { name: "Furosemide 40mg", desc: "Diuretic used to treat fluid retention.", price: 34, img: "https://www.emedbucket.com/emedpro_img/uploads/product/main/healthglowpharmacy/1620395254_4011_0.jpg" },
+      { name: "Hydrochlorothiazide 25mg", desc: "Diuretic for high blood pressure.", price: 45, img: "https://api.chemist180.com/api/media/image-resize/?path=Product%20Images/&name=HYDROCL_CHEMIST180.jpg" },
+    ];
+ 
+    while (medicines.length < 50) {
+      medicines.push({
+        name: `Generic Med ${medicines.length + 1}`,
+        desc: "Generic medicine description.",
+        price: Math.floor(20 + Math.random() * 100),
+        img: "https://via.placeholder.com/240x160.png?text=Medicine"
+      });
+    }
+
+    function displayMedicines(list) {
+      medicineList.innerHTML = '';
+      list.forEach((med, index) => {
+        const card = document.createElement('div');
+        card.className = 'medicine-card';
+        card.innerHTML = `
+          <img src="${med.img}" alt="${med.name}">
+          <div class="medicine-name">${med.name}</div>
+          <div class="medicine-desc">${med.desc}</div>
+          <div class="price">₹${med.price.toFixed(2)}</div>
+          <button class="add-cart-btn">Add to Cart</button>
+        `;
+        card.querySelector('button').onclick = () => addToCart(med);
+        medicineList.appendChild(card);
+      });
+    }
+
+    function filterMedicines() {
+      const searchText = searchInput.value.toLowerCase();
+      const filtered = medicines.filter(med => med.name.toLowerCase().includes(searchText));
+      displayMedicines(filtered);
+    }
+
+    function addToCart(medicine) {
+      cart.push(medicine);
+      renderCart();
+    }
+
+    function removeFromCart(index) {
+      cart.splice(index, 1);
+      renderCart();
+    }
+
+    function renderCart() {
+      cartList.innerHTML = '';
+      let total = 0;
+      cart.forEach((item, i) => {
+        const li = document.createElement('li');
+        li.innerHTML = `${item.name} - ₹${item.price}
+          <button class="remove-btn" onclick="removeFromCart(${i})">Remove</button>`;
+        cartList.appendChild(li);
+        total += item.price;
+      });
+      totalPriceEl.textContent = total.toFixed(2);
+    }
+
+    function scrollToSection(id) {
+      document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function submitOrder(e) {
+      e.preventDefault();
+      if (cart.length === 0) {
+        alert('Your cart is empty!');
+        return;
+      }
+      alert('Order placed successfully!');
+    }
+
+    displayMedicines(medicines);
+
+
+
+// <script>
+  function toggleForm(form) {
+    document.getElementById('login-box').style.display = form === 'login' ? 'block' : 'none';
+    document.getElementById('register-box').style.display = form === 'register' ? 'block' : 'none';
+  }
+
+  function registerUser(e) {
+    e.preventDefault();
+    const name = document.getElementById("reg-name").value;
+    const email = document.getElementById("reg-email").value;
+    const password = document.getElementById("reg-password").value;
+
+    if (localStorage.getItem(email)) {
+      alert("Email already registered.");
+      return;
+    }
+
+    localStorage.setItem(email, JSON.stringify({ name, password }));
+    alert("Registration successful. Please login.");
+    toggleForm('login');
+  }
+
+  function loginUser(e) {
+    e.preventDefault();
+    const email = document.getElementById("login-email").value;
+    const password = document.getElementById("login-password").value;
+    const user = JSON.parse(localStorage.getItem(email));
+
+    if (user && user.password === password) {
+      localStorage.setItem("loggedIn", "true");
+      document.getElementById("auth-container").style.display = "none";
+      document.getElementById("main-content").style.display = "block";
+    } else {
+      alert("Invalid email or password.");
+    }
+  }
+
+  window.onload = function () {
+    if (localStorage.getItem("loggedIn") === "true") {
+      document.getElementById("auth-container").style.display = "none";
+      document.getElementById("main-content").style.display = "block";
+    }
+  };
+<!-- </script> -->
+
+
+
+
+
+
+
+
+
+
+  </script>
+</body>
+</html> 
+
+
+
